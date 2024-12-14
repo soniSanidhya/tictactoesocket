@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { io } from "socket.io-client";
 
+
 export default function App() {
   const { roomId, name } = useParams();
 
@@ -29,31 +30,6 @@ export default function App() {
   const { winner } = calculateWinner(squares);
   const isDraw = !winner && squares.every((square) => square);
 
-  function handlePlay(nextSquares) {
-    console.log("my Symbol", mySymbol);
-    console.log("Turn", turn);
-    if (mySymbol == turn) {
-      setSquares(nextSquares);
-      //   console.log("nextSquares", nextSquares);
-
-      // setXIsNext(!xIsNext);
-
-      socket.emit("play", { roomId, nextSquares });
-
-      socket.emit("next turn", { roomId, turn: turn === "X" ? "O" : "X" });
-    }
-  }
-
-  useEffect(() => {
-    console.log("useEffect");
-    socket.emit("join room", roomId);
-    socket.emit("player", { player: name, roomId });
-  }, [socket]);
-
-  useEffect(() => {
-    socket.emit("get player", roomId);
-  }, [roomId, socket]);
-
   function resetGame() {
     resetGameHandler();
     socket.emit("reset", roomId);
@@ -71,6 +47,38 @@ export default function App() {
     }
     setSquares(Array(9).fill(null));
   }
+
+  function handlePlay(nextSquares) {
+    console.log("my Symbol", mySymbol);
+    console.log("Turn", turn);
+    if (mySymbol == turn) {
+      setSquares(nextSquares);
+      //   console.log("nextSquares", nextSquares);
+
+      // setXIsNext(!xIsNext);
+
+      socket.emit("play", { roomId, nextSquares });
+
+      socket.emit("next turn", { roomId, turn: turn === "X" ? "O" : "X" });
+    }
+  }
+
+  useEffect(() => {
+    // console.log("useEffect");
+    socket.emit("join room", roomId);
+    socket.emit("player", { player: name, roomId });
+  }, [socket]);
+
+  // useEffect(() => {
+  //   if(player && player.length === 2)
+  //   location.reload();
+  // }, [player])
+
+  useEffect(() => {   
+    socket.emit("get player", roomId);
+  }, [roomId, socket]);
+
+ 
 
   useEffect(() => {
     socket.on("players", (room) => {
@@ -103,9 +111,13 @@ export default function App() {
     });
 
     socket.on("player joined", (msg) => {
-      console.log(msg);
+      console.log(msg ," hii");
+      setPlayer(msg);
+
       // socket.emit("get player", roomId);
     });
+
+
 
     socket.on("player exists", (msg) => {
         // navigation(-1);

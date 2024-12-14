@@ -12,98 +12,78 @@ const io = new Server(server, {
   },
 });
 
-// io.on('connection', (socket) => {
-//     socket.on('join room' , (roomId) => {
-//         socket.join(roomId);
-//         console.log(`User joined room ${roomId}`);
-//         socket.to(roomId).emit("player joined" , "playerJoined");
-//     }),
-//     socket.on('disconnect', () => {
-//         console.log("User disconnected");
-//     })
-//     socket.on('isMyTurn', ({roomId, isMyTurn}) => {
-//         console.log(isMyTurn);
-
-//         io.to(roomId).emit('isMyTurn', !isMyTurn);
-//     })
-
-//     socket.on('xIsNext', ({roomId, xIsNext}) => {
-//         io.to(roomId).emit('xIsNext', xIsNext);
-//     })
-
-//     socket.on('play', ({roomId, nextSquares}) => {
-//         console.log(nextSquares);
-
-//         io.to(roomId).emit('play', nextSquares);
-//     })
-//     socket.on('reset', (roomId) => {
-//         io.to(roomId).emit('reset');
-//     })
-//     socket.on('winner', (roomId, winner) => {
-//         io.to(roomId).emit('winner', winner);
-//     })
-//     socket.on('draw', (roomId) => {
-//         io.to(roomId).emit('draw');
-//     })
-//     socket.on('leave room', (roomId) => {
-//         socket.leave(roomId);
-//         console.log(`User left room ${roomId}`);
-//     })
-//     socket.on('player1' , ({roomId , player}) => {
-//         console.log(player);
-//         console.log(roomId);
-//         io.to(roomId).emit('player1', player);
-//     })
-//     socket.on('player2' , ({roomId , player}) => {
-//         console.log(player);
-//         console.log(roomId);
-//         io.to(roomId).emit('player2', player);
-//     })
-// })
-
 const rooms = {};
 
-// setInterval(() => {
-//     console.log(rooms);
-// }, 5000);
+// const [roomss , setRooms] = useState({});
 
 io.on("connection", (socket) => {
   console.log("user joined", socket.id);
 
   socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
+    let targetRoomId = null;
     Object.keys(rooms).forEach((roomId) => {
-      rooms[roomId] = rooms[roomId].filter((p) => p.id !== socket.id);
+      rooms[roomId] = rooms[roomId].filter((p) => {
+        if (p.id === socket.id) {
+          targetRoomId = roomId;
+        }
+      return  p.id !== socket.id
+      });
+
+      console.log("targeted room", rooms[targetRoomId]);
+      
+
       if (rooms[roomId].length === 0) {
         delete rooms[roomId];
         console.log(`Room ${roomId} deleted`);
       }
     });
+
+    if (targetRoomId) {
+      console.log("targeted room", rooms[targetRoomId]);
+      socket.broadcast.to(targetRoomId).emit("player joined", rooms[targetRoomId]);
+    }
   });
 
   socket.on("join room", (roomId) => {
     socket.join(roomId);
+    // socket.
     rooms[roomId] = rooms[roomId] || [];
     console.log(`User joined room ${roomId}`);
-    socket.to(roomId).emit("player joined", "playerJoined");
+    // socket.broadcast.to(roomId).emit("player joined", "playerJoined");
   });
 
   socket.on("player", ({ player, roomId }) => {
     if (rooms[roomId]?.length < 2) {
-      if (rooms[roomId].find((p) => p.player?.toLowerCase() === player?.toLowerCase()))
+      if (
+        rooms[roomId].find(
+          (p) => p.player?.toLowerCase() === player?.toLowerCase()
+        )
+      )
         socket.emit("player exists", "username already exists");
-      else rooms[roomId].push({ player, id: socket.id , symbol : rooms[roomId].length === 0 ? "X" : rooms[roomId].map(p => p.symbol === "X" ? "O" : "X")[0]});
+      else {
+        rooms[roomId].push({
+          player,
+          id: socket.id,
+          symbol:
+            rooms[roomId].length === 0
+              ? "X"
+              : rooms[roomId].map((p) => (p.symbol === "X" ? "O" : "X"))[0],
+        });
+        console.log(rooms[roomId]);
+        socket.broadcast.to(roomId).emit("player joined", rooms[roomId]);
+      }
     } else socket.emit("room full");
-    console.log(rooms);
+
     // socket.emit("players", rooms[roomId]);
     // socket.to(roomId).emit("players", rooms[roomId]);
   });
 
   socket.on("get player", (roomId) => {
-    console.log("request for player", roomId); 
+    console.log("request for player", roomId);
     if (rooms[roomId]) {
-        console.log("players", rooms[roomId]);
-        
+      // console.log("players", rooms[roomId]);
+
       socket.emit("players", rooms[roomId]);
     } else {
       socket.emit("room not found");
@@ -112,7 +92,7 @@ io.on("connection", (socket) => {
 
   socket.on("next turn", ({ roomId, turn }) => {
     console.log("next turn", turn);
-    
+
     io.in(roomId).emit("next turn", turn);
   });
 
@@ -122,15 +102,14 @@ io.on("connection", (socket) => {
     io.to(roomId).emit("play", nextSquares);
   });
 
-    socket.on("reset", (roomId) => {
-        io.in(roomId).emit("reset");
-    });
+  socket.on("reset", (roomId) => {
+    io.in(roomId).emit("reset");
+  });
 
-    socket.on("winner", ({roomId, scores}) => {
-        console.log("winner", scores);
-        io.in(roomId).emit("winner", scores);
-    });
-
+  socket.on("winner", ({ roomId, scores }) => {
+    console.log("winner", scores);
+    io.in(roomId).emit("winner", scores);
+  });
 });
 
 app.use(
