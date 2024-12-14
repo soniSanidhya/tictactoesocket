@@ -235,7 +235,7 @@ export default function App() {
         {/* Responsive flex layout that stacks on smaller screens */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 w-full max-w-6xl">
           <PlayerProfile
-            name={player && player[0]?.player}
+                  name={player && player[0] ? player[0].player : "waiting..."}
             symbol={player && player[0]?.symbol}
             avatar={defaultAvatars.X}
             isActive={xIsNext && !winner}
