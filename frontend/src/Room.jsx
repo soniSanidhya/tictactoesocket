@@ -6,9 +6,16 @@ const Room = () => {
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
   const navigation = useNavigate();
+  const [joinRandom, setJoinRandom] = useState(false);
 
   const handleSubmission = (e) => {
     e.preventDefault();
+    
+    if(joinRandom) {
+      navigation(`/game/${name}/random`);
+      return;
+    }
+
     navigation(`/game/${name}/${roomId ? roomId : Math.random().toString(36).substring(7)}`);
     //console.log(roomId, name);
   };
@@ -54,7 +61,18 @@ const Room = () => {
           >
             {roomId ? "Join Room" : "Create Room"}
           </motion.button>
-        </div>
+          <motion.button
+            onClick={() => {
+              setJoinRandom(true);
+             
+            }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full border rounded-lg py-2 bg-blue-800 text-white hover:bg-blue-700 transition-colors duration-300"
+          >
+            Join Random Room
+          </motion.button>
+          </div>
       </form>
     </div>
   );

@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { io } from "socket.io-client";
 
-
 export default function App() {
   const { roomId, name } = useParams();
 
@@ -65,8 +64,12 @@ export default function App() {
 
   useEffect(() => {
     // //console.log("useEffect");
-    socket.emit("join room", roomId);
-    socket.emit("player", { player: name, roomId });
+    if (roomId === "random") {
+      socket.emit("join random", name);
+    } else {
+      socket.emit("join room", roomId);
+      socket.emit("player", { player: name, roomId });
+    }
   }, [socket]);
 
   // useEffect(() => {
@@ -74,11 +77,9 @@ export default function App() {
   //   location.reload();
   // }, [player])
 
-  useEffect(() => {   
+  useEffect(() => {
     socket.emit("get player", roomId);
   }, [roomId, socket]);
-
- 
 
   useEffect(() => {
     socket.on("players", (room) => {
@@ -117,13 +118,10 @@ export default function App() {
       // socket.emit("get player", roomId);
     });
 
-
-
     socket.on("player exists", (msg) => {
-        navigation(-1);
-        //console.log(msg);
-        
-    })
+      navigation(-1);
+      //console.log(msg);
+    });
 
     return () => {
       socket.off("players");
@@ -135,17 +133,16 @@ export default function App() {
     };
   }, [socket, name, roomId]);
 
-
   return (
     <>
       {/* Mobile-friendly header with responsive layout */}
       <div className="flex flex-wrap absolute w-full justify-between items-center px-4 py-2 sm:px-6">
-        <div onClick={
-          ()=>{
-
-            navigator.clipboard.writeText(roomId)
-          }
-        } className="bg-slate-600 px-3 py-1 rounded-lg m-1 text-sm sm:text-base max-w-fit cursor-pointer ">
+        <div
+          onClick={() => {
+            navigator.clipboard.writeText(roomId);
+          }}
+          className="bg-slate-600 px-3 py-1 rounded-lg m-1 text-sm sm:text-base max-w-fit cursor-pointer "
+        >
           Room Id: {roomId}
         </div>
         <div
@@ -173,7 +170,7 @@ export default function App() {
         {/* Responsive flex layout that stacks on smaller screens */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 w-full max-w-6xl">
           <PlayerProfile
-                  name={player && player[0] ? player[0].player : "waiting..."}
+            name={player && player[0] ? player[0].player : "waiting..."}
             symbol={player && player[0]?.symbol}
             avatar={defaultAvatars.X}
             isActive={xIsNext && !winner}

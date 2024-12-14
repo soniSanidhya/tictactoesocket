@@ -27,11 +27,10 @@ io.on("connection", (socket) => {
         if (p.id === socket.id) {
           targetRoomId = roomId;
         }
-      return  p.id !== socket.id
+        return p.id !== socket.id;
       });
 
       //console.log("targeted room", rooms[targetRoomId]);
-      
 
       if (rooms[roomId].length === 0) {
         delete rooms[roomId];
@@ -41,7 +40,9 @@ io.on("connection", (socket) => {
 
     if (targetRoomId) {
       ////console.log("targeted room", rooms[targetRoomId]);
-      socket.broadcast.to(targetRoomId).emit("player joined", rooms[targetRoomId]);
+      socket.broadcast
+        .to(targetRoomId)
+        .emit("player joined", rooms[targetRoomId]);
     }
   });
 
@@ -51,6 +52,24 @@ io.on("connection", (socket) => {
     rooms[roomId] = rooms[roomId] || [];
     //console.log(`User joined room ${roomId}`);
     // socket.broadcast.to(roomId).emit("player joined", "playerJoined");
+  });
+
+  socket.on("join random", (player) => {
+    let roomId = Object.keys(rooms).find(
+      (key) => rooms[key].length === 1 && rooms[key][0].isRandom
+    );
+    if (!roomId) {
+      roomId = Math.random().toString(36).substring(7);
+      rooms[roomId] = [];
+    }
+    rooms[roomId].push({
+      player,
+      id: socket.id,
+      isRandom: true,
+      symbol: rooms[roomId].length === 1 ? "X" : "O",
+    });
+    socket.join(roomId);
+    socket.emit("joined room", roomId);
   });
 
   socket.on("player", ({ player, roomId }) => {
@@ -65,6 +84,7 @@ io.on("connection", (socket) => {
         rooms[roomId].push({
           player,
           id: socket.id,
+          isRandom: false,
           symbol:
             rooms[roomId].length === 0
               ? "X"
