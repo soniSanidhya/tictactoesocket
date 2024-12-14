@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 
-export default function GameControls({ onReset }) {
+export default function GameControls({ onReset , isDisabled }) {
+  //console.log("isDisabled", isDisabled);
+  
   return (
     <motion.button
+    disabled={isDisabled}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className="px-4 py-2 sm:px-6 sm:py-3 bg-indigo-600 text-white rounded-lg font-semibold

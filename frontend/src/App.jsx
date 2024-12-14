@@ -11,19 +11,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 
 export default function App() {
-  const { roomId, name } = useParams();
+  const { roomId : room, name } = useParams();
 
   const query = new URLSearchParams(window.location.search);
 
   // const {new}
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const [roomId , setRoomId] = useState(room);
   const [xIsNext, setXIsNext] = useState();
   const [isNew] = useState(query.get("new"));
   const [player, setPlayer] = useState();
   const [turn, setTurn] = useState("X");
   const [scores, setScores] = useState({ X: 0, O: 0 });
   const [mySymbol, setMySymbol] = useState();
-  const socket = useMemo(() => io("https://tictactoesocket.onrender.com/"), []);
+  // const socket = useMemo(() => io("https://tictactoesocket.onrender.com/"), []);
+  
+  const socket = useMemo(() => io("http://localhost:3000" , ), []);
   const navigation = useNavigate();
 
   const { winner } = calculateWinner(squares);
@@ -62,15 +65,32 @@ export default function App() {
     }
   }
 
+  
+  
+
+  useEffect(() => {
+    if(roomId === "random" ){
+      console.log("random , roomId");
+      
+       socket.on("my roomId", (roomId) => {
+        setRoomId(roomId);  
+    });
+  }
+});
+
   useEffect(() => {
     // //console.log("useEffect");
     if (roomId === "random") {
+      //console.log("random");
       socket.emit("join random", name);
     } else {
       socket.emit("join room", roomId);
       socket.emit("player", { player: name, roomId });
     }
   }, [socket]);
+
+  //console.log("roomId : ", room, roomId);
+  
 
   // useEffect(() => {
   //   if(player && player.length === 2)
@@ -191,7 +211,7 @@ export default function App() {
               squares={squares}
               onPlay={handlePlay}
             />
-            <GameControls onReset={resetGame} />
+            <GameControls isDisabled={winner == null || isDraw ? true : false} onReset={resetGame} />
           </div>
 
           <PlayerProfile
