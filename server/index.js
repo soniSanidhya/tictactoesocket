@@ -17,10 +17,10 @@ const rooms = {};
 // const [roomss , setRooms] = useState({});
 
 io.on("connection", (socket) => {
-  console.log("user joined", socket.id);
+  //////console.log("user joined", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("User disconnected", socket.id);
+    ////console.log("User disconnected", socket.id);
     let targetRoomId = null;
     Object.keys(rooms).forEach((roomId) => {
       rooms[roomId] = rooms[roomId].filter((p) => {
@@ -30,17 +30,17 @@ io.on("connection", (socket) => {
       return  p.id !== socket.id
       });
 
-      console.log("targeted room", rooms[targetRoomId]);
+      //console.log("targeted room", rooms[targetRoomId]);
       
 
       if (rooms[roomId].length === 0) {
         delete rooms[roomId];
-        console.log(`Room ${roomId} deleted`);
+        //console.log(`Room ${roomId} deleted`);
       }
     });
 
     if (targetRoomId) {
-      console.log("targeted room", rooms[targetRoomId]);
+      ////console.log("targeted room", rooms[targetRoomId]);
       socket.broadcast.to(targetRoomId).emit("player joined", rooms[targetRoomId]);
     }
   });
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     // socket.
     rooms[roomId] = rooms[roomId] || [];
-    console.log(`User joined room ${roomId}`);
+    //console.log(`User joined room ${roomId}`);
     // socket.broadcast.to(roomId).emit("player joined", "playerJoined");
   });
 
@@ -70,7 +70,7 @@ io.on("connection", (socket) => {
               ? "X"
               : rooms[roomId].map((p) => (p.symbol === "X" ? "O" : "X"))[0],
         });
-        console.log(rooms[roomId]);
+        //console.log(rooms[roomId]);
         socket.broadcast.to(roomId).emit("player joined", rooms[roomId]);
       }
     } else socket.emit("room full");
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("get player", (roomId) => {
-    console.log("request for player", roomId);
+    //console.log("request for player", roomId);
     if (rooms[roomId]) {
       // console.log("players", rooms[roomId]);
 
@@ -91,13 +91,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("next turn", ({ roomId, turn }) => {
-    console.log("next turn", turn);
+    //console.log("next turn", turn);
 
     io.in(roomId).emit("next turn", turn);
   });
 
   socket.on("play", ({ roomId, nextSquares }) => {
-    console.log(nextSquares);
+    //console.log(nextSquares);
 
     io.to(roomId).emit("play", nextSquares);
   });
@@ -107,7 +107,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("winner", ({ roomId, scores }) => {
-    console.log("winner", scores);
+    //console.log("winner", scores);
     io.in(roomId).emit("winner", scores);
   });
 });
@@ -127,5 +127,5 @@ app.get("/:roomId", (req, res) => {
 });
 
 server.listen(3000, () => {
-  console.log("Server is running on port 3000");
+  //console.log("Server is running on port 3000");
 });

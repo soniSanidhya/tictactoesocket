@@ -49,11 +49,11 @@ export default function App() {
   }
 
   function handlePlay(nextSquares) {
-    console.log("my Symbol", mySymbol);
-    console.log("Turn", turn);
+    //console.log("my Symbol", mySymbol);
+    //console.log("Turn", turn);
     if (mySymbol == turn) {
       setSquares(nextSquares);
-      //   console.log("nextSquares", nextSquares);
+      //   //console.log("nextSquares", nextSquares);
 
       // setXIsNext(!xIsNext);
 
@@ -64,7 +64,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    // console.log("useEffect");
+    // //console.log("useEffect");
     socket.emit("join room", roomId);
     socket.emit("player", { player: name, roomId });
   }, [socket]);
@@ -82,7 +82,7 @@ export default function App() {
 
   useEffect(() => {
     socket.on("players", (room) => {
-      console.log(room);
+      //console.log(room);
       setPlayer(room);
       const playerSymbol = room?.find(
         (element) => element.player === name
@@ -92,12 +92,12 @@ export default function App() {
     });
 
     socket.on("next turn", (turn) => {
-      console.log("next turn", turn);
+      //console.log("next turn", turn);
       setTurn(turn);
     });
 
     socket.on("play", (nextSquares) => {
-      console.log(nextSquares);
+      //console.log(nextSquares);
       setSquares(nextSquares);
     });
 
@@ -106,12 +106,12 @@ export default function App() {
     });
 
     socket.on("winner", (winner) => {
-      console.log("winner", winner);
+      //console.log("winner", winner);
       setScores(() => winner);
     });
 
     socket.on("player joined", (msg) => {
-      console.log(msg ," hii");
+      //console.log(msg ," hii");
       setPlayer(msg);
 
       // socket.emit("get player", roomId);
@@ -120,7 +120,9 @@ export default function App() {
 
 
     socket.on("player exists", (msg) => {
-        // navigation(-1);
+        navigation(-1);
+        //console.log(msg);
+        
     })
 
     return () => {
@@ -133,70 +135,6 @@ export default function App() {
     };
   }, [socket, name, roomId]);
 
-  // return (
-  //   <>
-  //     <div className="flex justify-between">
-  //       <div className="bg-slate-600  px-4 py-2 max-w-fit rounded-lg m-2">
-  //         Room Id: {roomId}
-  //       </div>
-  //       <div
-  //         onClick={() => {
-  //           socket.disconnect();
-  //           console.log("clicked");
-  //           navigation(-1);
-  //         }}
-  //         className="bg-slate-600  px-4 py-2 max-w-fit rounded-lg m-2"
-  //       >
-  //         Exit
-  //       </div>
-  //     </div>
-  //     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-gray-900 to-gray-800">
-  //       <motion.h1
-  //         initial={{ opacity: 0, y: -50 }}
-  //         animate={{ opacity: 1, y: 0 }}
-  //         className="text-5xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500"
-  //       >
-  //         Tic Tac Toe
-  //       </motion.h1>
-
-  //       <div className="flex items-center gap-12">
-  //         <PlayerProfile
-  //           name={player && player[0]?.player}
-  //           symbol={player && player[0]?.symbol}
-  //           avatar={defaultAvatars.X}
-  //           isActive={xIsNext && !winner}
-  //           score={
-  //             player && player[0]?.symbol === "X" ? scores.X : scores.O || 0
-  //           }
-  //         />
-
-  //         <div className="flex flex-col items-center gap-8">
-  //           <GameStatus
-  //             winner={winner}
-  //             xIsNext={turn == "X" ? true : false}
-  //             isDraw={isDraw}
-  //           />
-  //           <GameBoard
-  //             xIsNext={xIsNext}
-  //             squares={squares}
-  //             onPlay={handlePlay}
-  //           />
-  //           <GameControls onReset={resetGame} />
-  //         </div>
-
-  //         <PlayerProfile
-  //           name={player && player[1] ? player[1].player : "waiting..."}
-  //           symbol={player && player[1]?.symbol}
-  //           avatar={defaultAvatars.O}
-  //           isActive={!xIsNext && !winner}
-  //           score={
-  //             player && player[1]?.symbol === "X" ? scores.X : scores.O || 0
-  //           }
-  //         />
-  //       </div>
-  //     </div>
-  //   </>
-  // );
 
   return (
     <>
@@ -213,7 +151,7 @@ export default function App() {
         <div
           onClick={() => {
             socket.disconnect();
-            console.log("clicked");
+            //console.log("clicked");
             navigation(-1);
           }}
           className="bg-slate-600 px-3 py-1 rounded-lg m-1 text-sm sm:text-base max-w-fit"
