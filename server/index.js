@@ -2,12 +2,15 @@ import express from "express";
 import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
+import env from "dotenv";
+env.config();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
+    // origin: "*",
     credentials: true,
   },
 });
@@ -162,12 +165,20 @@ io.on("connection", (socket) => {
   });
 });
 
+
+console.log(process.env.FRONTEND_URL);
+
+
 app.use(
   cors({
-    origin: "*",
+    origin:  process.env.FRONTEND_URL,
+    // origin: "*",
     credentials: true,
   })
 );
+
+// console.log(typeof(process.env.FRONTEND_URL));
+
 
 app.get("/:roomId", (req, res) => {
   const roomId = req.params.roomId;
@@ -176,6 +187,6 @@ app.get("/:roomId", (req, res) => {
   );
 });
 
-server.listen(3000, () => {
-  console.log("Server is running on port 3000");
+server.listen(process.env.PORT , () => {
+  console.log("Server is running on port", process.env.PORT);
 });

@@ -8,6 +8,7 @@ import { calculateWinner } from "./utils/gameLogic";
 import { defaultAvatars } from "./utils/defaultAvatars";
 import { useNavigate, useParams } from "react-router-dom";
 
+
 import { io } from "socket.io-client";
 
 export default function App() {
@@ -24,9 +25,9 @@ export default function App() {
   const [turn, setTurn] = useState("X");
   const [scores, setScores] = useState({ X: 0, O: 0 });
   const [mySymbol, setMySymbol] = useState();
-  // const socket = useMemo(() => io("https://tictactoesocket.onrender.com/"), []);
+  const socket = useMemo(() => io("https://tictactoesocket.onrender.com/"), []);
   
-  const socket = useMemo(() => io("http://localhost:3000" , ), []);
+  // const socket = useMemo(() => io("http://localhost:4000" , ), []);
   const navigation = useNavigate();
 
   const { winner } = calculateWinner(squares);
