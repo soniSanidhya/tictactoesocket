@@ -72,6 +72,17 @@ const Room = () => {
           >
             Join Random Room
           </motion.button>
+          <motion.button
+            onClick={() => {
+              setJoinRandom(true);
+              navigation('/bot-multiplayer')
+            }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            className="w-full border rounded-lg py-2 bg-blue-800 text-white hover:bg-blue-700 transition-colors duration-300"
+          >
+            Play with bot
+          </motion.button>
           </div>
       </form>
     </div>
