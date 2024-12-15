@@ -53,6 +53,9 @@ const Bot = () => {
     }
   }
 
+  console.log(import.meta.env.VITE_GOOGLE_API_KEY);
+  
+
   const callForBot = async (currentSquares) => {
     //console.log("Bot is working...");
 
