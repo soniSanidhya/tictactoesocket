@@ -54,7 +54,7 @@ export default function App() {
   function handlePlay(nextSquares) {
     //console.log("my Symbol", mySymbol);
     //console.log("Turn", turn);
-    if (mySymbol == turn) {
+    if (mySymbol == turn ) {
       setSquares(nextSquares);
       //   //console.log("nextSquares", nextSquares);
 
@@ -71,7 +71,7 @@ export default function App() {
 
   useEffect(() => {
     if(roomId === "random" ){
-      console.log("random , roomId");
+      //console.log("random , roomId");
       
        socket.on("my roomId", (roomId) => {
         setRoomId(roomId);  

@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
 
   socket.on("join room", (roomId) => {
     // socket.
-    console.log("join room", roomId);
+    //////console.log("join room", roomId);
     
     socket.join(roomId);
 

@@ -7,9 +7,15 @@ const Room = () => {
   const [name, setName] = useState("");
   const navigation = useNavigate();
   const [joinRandom, setJoinRandom] = useState(false);
+  const [playWithBot , setPlaywithBot] = useState(false);
 
   const handleSubmission = (e) => {
     e.preventDefault();
+
+    if(playWithBot){
+      navigation(`/game/${name}/bot-multiplayer`)
+      return;
+    }
     
     if(joinRandom) {
       navigation(`/game/${name}/random`);
@@ -74,8 +80,9 @@ const Room = () => {
           </motion.button>
           <motion.button
             onClick={() => {
-              setJoinRandom(true);
-              navigation('/bot-multiplayer')
+              // setJoinRandom(true);
+              setPlaywithBot(true);
+              // navigation('/bot-multiplayer')
             }}
             whileTap={{ scale: 0.95 }}
             type="submit"

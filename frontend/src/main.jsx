@@ -5,6 +5,7 @@ import './index.css'
 import Room from './Room.jsx'
 import { BrowserRouter, Routes , Route } from 'react-router-dom'
 import BotPage from './components/BotPage.jsx'
+import Bot from './Bot.jsx'
 
 
 
@@ -16,7 +17,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
        <Route path="/" element={<Room />} />
         <Route path="/game/:name/:roomId" element={<App />} />
-        <Route path="/bot-multiplayer" element={<BotPage />} />
+        <Route path="/game/:name/bot-multiplayer" element={<Bot />} />
       </Routes>
       </BrowserRouter>
       </>,
