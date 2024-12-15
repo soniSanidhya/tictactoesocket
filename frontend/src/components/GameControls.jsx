@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export default function GameControls({ onReset , isDisabled }) {
+export default function GameControls({ onReset , isDisabled = false }) {
   //console.log("isDisabled", isDisabled);
   
   return (

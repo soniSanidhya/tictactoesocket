@@ -146,7 +146,7 @@ const Bot = () => {
               onPlay={handlePlay}
             />
             <GameControls
-              isDisabled={winner == null || isDraw ? true : false}
+
               onReset={resetGame}
             />
           </div>
