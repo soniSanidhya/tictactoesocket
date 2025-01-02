@@ -15,10 +15,11 @@
       console.log("Hello");
 
       await fetch("https://tictactoesocket.onrender.com/loop")
-        .then((res) => {
-          // console.log(res);
+        .then((res) => res.text())
+        .then((text) => {
+          // console.log(text);
 
-          main.innerHTML = res;
+          main.innerHTML = text;
         })
         .catch((err) => {
             main.innerHTML = err;
@@ -26,8 +27,15 @@
         });
     };
 
-    fetchLoop();
-    console.log("called");
+    // fetchLoop();
+
+    setInterval(() => {
+        console.log("fetching");
+        
+      fetchLoop();
+    }, 1000 * 60 * 10 );
+
+    
     
   </script>
 </html>
