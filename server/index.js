@@ -180,7 +180,7 @@ app.use(
 // console.log(typeof(process.env.FRONTEND_URL));
 
 
-app.get("/:roomId", (req, res) => {
+app.get("/room/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   res.send(
     rooms[roomId] ? rooms[roomId].map((p) => p.player) : "Room not found"
