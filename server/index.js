@@ -187,6 +187,18 @@ app.get("/:roomId", (req, res) => {
   );
 });
 
+app.get("/loop", (req, res) => {
+  res.send("Server is running");
+});
+
+app.use((req, res, next) => {
+  if (req.path === "/loop") {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  }
+  next();
+});
+
 server.listen(process.env.PORT , () => {
   console.log("Server is running on port", process.env.PORT);
 });
