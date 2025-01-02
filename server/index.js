@@ -198,6 +198,10 @@ app.get("/loop", (req, res) => {
   res.send("Server is running");
 });
 
+setInterval(() => {
+  io.emit("ping", { data: "ping" });
+}, 1000 * 60 * 5);
+
 // app.use((req, res, next) => {
 //   if (req.path === "/loop") {
 //     res.header("Access-Control-Allow-Origin", "*");
