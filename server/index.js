@@ -169,10 +169,17 @@ io.on("connection", (socket) => {
 console.log(process.env.FRONTEND_URL);
 
 
+const allowedOrigins = [process.env.FRONTEND_URL, process.env.LOOPBACK_URL ];
+
 app.use(
   cors({
-    // origin:  process.env.FRONTEND_URL,
-    origin: "*",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
