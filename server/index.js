@@ -171,8 +171,8 @@ console.log(process.env.FRONTEND_URL);
 
 app.use(
   cors({
-    origin:  process.env.FRONTEND_URL,
-    // origin: "*",
+    // origin:  process.env.FRONTEND_URL,
+    origin: "*",
     credentials: true,
   })
 );
@@ -191,13 +191,13 @@ app.get("/loop", (req, res) => {
   res.send("Server is running");
 });
 
-app.use((req, res, next) => {
-  if (req.path === "/loop") {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.path === "/loop") {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   }
+//   next();
+// });
 
 server.listen(process.env.PORT , () => {
   console.log("Server is running on port", process.env.PORT);
