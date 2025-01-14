@@ -1,14 +1,29 @@
 {
-    "rewrites": [{
-        "source" : "/robots.txt",
-        "destination" : "/robots.txt"
-    },{
-        "source" : "/ads.txt",
-        "destination" : "/ads.txt"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
-}
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/robots.txt",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ]
+      },
+      {
+        "source": "/ads.txt",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ]
+      }
+    ]
+  }
+  
