@@ -102,6 +102,18 @@ LOOPBACK_URL=https://your-loop-url.com
 4. **Play**: Take turns placing X's and O's on the 3×3 grid
 5. **Win**: Get three in a row (horizontal, vertical, or diagonal) to win!
 
+## 📸 Screenshots
+
+### Bot Mode
+Play against AI for practice and skill improvement:
+
+![Bot Game Screenshot](https://github.com/user-attachments/assets/ac71aa3d-6629-4736-b6c6-2fafcabbde0f)
+
+### Multiplayer Room
+Join or create custom rooms to play with friends:
+
+![Room Game Screenshot](https://github.com/user-attachments/assets/84ffe3d1-6500-44c9-8841-e454a601058a)
+
 ## 📁 Project Structure
 
 ```
@@ -192,4 +204,4 @@ If you encounter any bugs or have suggestions for new features, please create an
 
 ---
 
-**Note**: Screenshots and live demo links would make this README even more engaging! If you'd like me to add screenshots or need help with any specific section, please let me know.
+**Enjoy playing Tic Tac Toe with friends and challenge yourself against the AI!** 🎯
